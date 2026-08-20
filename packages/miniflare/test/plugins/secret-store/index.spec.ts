@@ -37,7 +37,9 @@ test("single secret-store", async ({ expect }) => {
 
 	const response1 = await mf.dispatchFetch("http://localhost");
 
-	expect(await response1.text()).toBe('Secret "secret_name" not found');
+	const missing = await response1.text();
+	expect(missing).toContain('Secret "secret_name" not found');
+	expect(missing).toContain("local Secrets Store");
 	expect(response1.status).toBe(404);
 
 	const api = await mf.getSecretsStoreSecretAPI("SECRET");

@@ -14,7 +14,11 @@ export class SecretsStoreSecret extends WorkerEntrypoint<Env> {
 		const value = await this.env.store.get(this.env.secret_name, "text");
 
 		if (value === null) {
-			throw new Error(`Secret "${this.env.secret_name}" not found`);
+			throw new Error(
+				`Secret "${this.env.secret_name}" not found in local Secrets Store. ` +
+					`Listing or creating secrets remotely does not populate local dev. ` +
+					`Create it locally with \`wrangler secrets-store secret create <store-id> --name ${this.env.secret_name}\`.`
+			);
 		}
 
 		return value;
