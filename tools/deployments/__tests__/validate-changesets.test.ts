@@ -251,6 +251,7 @@ describe("validateChangesets()", () => {
 		);
 		expect(errors).toMatchInlineSnapshot(`
 			[
+			  "Major version bumps are not allowed for package "@cloudflare/vitest-plugin" in changeset at "major-vitest-plugin.md".",
 			  "Major version bumps are not allowed for package "package-c" in changeset at "major-three.md".",
 			]
 		`);
