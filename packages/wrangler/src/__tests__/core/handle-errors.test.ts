@@ -816,6 +816,31 @@ describe("handleError", () => {
 		});
 	});
 
+	describe("workers.dev subdomain required (10063)", () => {
+		it("should tell the user how to create a workers.dev subdomain", async ({
+			expect,
+		}) => {
+			const error = new APIError({
+				text: "A request to the Cloudflare API (/accounts/…/workers/scripts/…) failed.",
+				notes: [
+					{
+						text: "You need a workers.dev subdomain in order to proceed. Please go to the dashboard and open the Workers menu. Opening the Workers landing page for the first time will create a workers.dev subdomain automatically. [code: 10063]",
+					},
+				],
+				status: 400,
+				telemetryMessage: false,
+			});
+			error.code = 10063;
+
+			await handleError(error, {}, []);
+
+			expect(std.err).toContain("workers.dev subdomain");
+			expect(std.err).toContain(
+				"https://dash.cloudflare.com/?to=/:account/workers/onboarding"
+			);
+		});
+	});
+
 	describe("Cloudflare SDK errors", () => {
 		it("should surface the Retry-After header from a 429 SDK error", async ({
 			expect,

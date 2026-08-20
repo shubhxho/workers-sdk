@@ -570,6 +570,15 @@ export async function handleError(
 			// Ignore errors reading config
 		}
 		await whoami(complianceConfig, accountTag, configAccountId);
+	} else if (e instanceof APIError && e.code === 10063) {
+		mayReport = false;
+		e.notes.push({
+			text:
+				"\nYour account needs a workers.dev subdomain before this command can continue. " +
+				"Opening the Workers dashboard for the first time creates one automatically:\n" +
+				"https://dash.cloudflare.com/?to=/:account/workers/onboarding",
+		});
+		logger.error(e);
 	} else if (e instanceof ParseError) {
 		e.notes.push({
 			text: "\nIf you think this is a bug, please open an issue at: https://github.com/cloudflare/workers-sdk/issues/new/choose",
